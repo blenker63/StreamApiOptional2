@@ -68,28 +68,30 @@ public class EmployeeServiceImpl {
         return resultGet;
     }
 
-    public Optional<Employee> employeeMaxSalary(int department) {
-        return employeeData.values().stream()
-                .filter(employeeData -> employeeData.getDepartment() == department)
-                .max(Comparator.comparing(Employee::getSalary));
-    }
-
-    public Optional<Employee> employeeMinSalary(int department) {
-        return employeeData.values().stream()
-                .filter(employeeData -> employeeData.getDepartment() == department)
-                .min(Comparator.comparing(Employee::getSalary));
-    }
-
-    public List<Employee> employeePrintAll() {
-        return employeeData.values().stream()
-                .sorted(Comparator.comparing(Employee::getDepartment))
-                .collect(Collectors.toList());
-    }
-
-    public List<Employee> employeePrintDepartment(int department) {
-        return employeeData.values().stream()
-                .filter(employeeData -> employeeData.getDepartment() == department)
-                .collect(Collectors.toList());
-    }
-
 }
+
+//    public Optional<Employee> employeeMaxSalary(int department) {
+//        return employeeData.values().stream()
+//                .filter(employeeData -> employeeData.getDepartment() == department)
+//                .max(Comparator.comparing(Employee::getSalary));
+//    }
+//
+//    public Optional<Employee> employeeMinSalary(int department) {
+//        return employeeData.values().stream()
+//                .filter(employeeData -> employeeData.getDepartment() == department)
+//                .min(Comparator.comparing(Employee::getSalary));
+//    }
+//
+//    public List<Employee> employeePrintAll() {
+//        return employeeData.values().stream()
+//                .sorted(Comparator.comparing(Employee::getDepartment))
+//                .collect(Collectors.toList());
+//    }
+//
+//    public List<Employee> employeePrintDepartment(int department) {
+//        return employeeData.values().stream()
+//                .filter(employeeData -> employeeData.getDepartment() == department)
+//                .collect(Collectors.toList());
+//    }
+
+//}
