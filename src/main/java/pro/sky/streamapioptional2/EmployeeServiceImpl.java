@@ -2,21 +2,17 @@ package pro.sky.streamapioptional2;
 
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl {
     private static int counter = 0;
     private int number = 10;
 
-    //    private final Map<String, Employee> employeeData = new HashMap<>();
     Map<String, Employee> employeeData = new HashMap<>(Map.of(
             "ИвановИванИванович",
-            new Employee(
-                    "Иванов", "Иван", "Иванович", 1, 11_000),
+            new Employee("Иванов", "Иван", "Иванович", 1, 11_000),
             "ПетровПетрПетрович",
             new Employee("Петров", "Петр", "Петрович", 2, 15000),
             "СидоровСидорСидорович",
@@ -72,54 +68,28 @@ public class EmployeeServiceImpl {
         return resultGet;
     }
 
-
-    public String printAllEmployee() {
-        for (Employee value : employeeData.values()) {
-            System.out.println(value);
-        }
-        return null;
-    }
-
-    public int getCurrentSize() {
-        return counter;
-    }
-
-    public int sumSalary() {
-        int sumSalary = 0;
-        for (Employee value : employeeData.values()) {
-            sumSalary = sumSalary + value.getSalary();
-//            return sumSalary;
-        }
-        return sumSalary;
-    }
-
-//    public Optional<Employee> employeeDepartment() {
-//
-//    }
-
-    public Optional<Employee> employeeMaxSalary() {
+    public Optional<Employee> employeeMaxSalary(int department) {
         return employeeData.values().stream()
-                .max(Comparator.comparing(employeeData -> employeeData.getSalary()));
+                .filter(employeeData -> employeeData.getDepartment() == department)
+                .max(Comparator.comparing(Employee::getSalary));
     }
 
-
-    public Optional<Employee> employeeMinSalary() {
+    public Optional<Employee> employeeMinSalary(int department) {
         return employeeData.values().stream()
-                .min(Comparator.comparing(employeeData -> employeeData.getSalary()));
+                .filter(employeeData -> employeeData.getDepartment() == department)
+                .min(Comparator.comparing(Employee::getSalary));
     }
 
-    public String averageSalary() {
-        float average = (float) sumSalary() / counter;
-        String averageSalary = String.format("%.2f", average);
-        return averageSalary;
+    public List<Employee> employeePrintAll() {
+        return employeeData.values().stream()
+                .sorted(Comparator.comparing(Employee::getDepartment))
+                .collect(Collectors.toList());
     }
 
-    public void employeeList() {
-        int id = 0;
-        for (Employee value : employeeData.values()) {
-            id++;
-            System.out.println("№ п/п " + id + "  " + value.getSurname() + "  " + value.getName() + "  "
-                    + value.getPatronymic() + ";");
-        }
+    public List<Employee> employeePrintDepartment(int department) {
+        return employeeData.values().stream()
+                .filter(employeeData -> employeeData.getDepartment() == department)
+                .collect(Collectors.toList());
     }
+
 }
