@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/employee")
+@RequestMapping(path = "/employee/departments")
 public class EmployeeController {
     private final EmployeeServiceImpl employeeServiceImpl;
 
@@ -31,37 +31,45 @@ public class EmployeeController {
             return "Добавлен сотрудник: " + employeeServiceImpl.addEmployee(surname, name, patronymic, department, salary);
     }
 
-        @GetMapping(path = "/remove")
-        public String removeEmployee (@RequestParam(required = false, value = "surname") String surname,
-                                        @RequestParam(value = "name", required = false) String name,
-                                        @RequestParam(value = "patronymic", required = false) String patronymic){
-            if (surname == null || name == null || patronymic == null)
-                throw new RuntimeException("Данные введены не полностью");
-            else
-                return "Удален сотрудник - " + employeeServiceImpl.removeEmployee(surname, name, patronymic);
+    @GetMapping(path = "/remove")
+    public String removeEmployee(@RequestParam(required = false, value = "surname") String surname,
+                                 @RequestParam(value = "name", required = false) String name,
+                                 @RequestParam(value = "patronymic", required = false) String patronymic) {
+        if (surname == null || name == null || patronymic == null)
+            throw new RuntimeException("Данные введены не полностью");
+        else
+            return "Удален сотрудник - " + employeeServiceImpl.removeEmployee(surname, name, patronymic);
 
-        }
-        @GetMapping(path = "/get")
-        public String getEmployee(@RequestParam(required = false, value = "surname") String surname,
-                                  @RequestParam(value = "name", required = false) String name,
-                                  @RequestParam(value = "patronymic", required = false) String patronymic){
+    }
+
+    @GetMapping(path = "/get")
+    public String getEmployee(@RequestParam(required = false, value = "surname") String surname,
+                              @RequestParam(value = "name", required = false) String name,
+                              @RequestParam(value = "patronymic", required = false) String patronymic) {
         return "Найден сотрудник: " + employeeServiceImpl.getEmployee(surname, name, patronymic);
-        }
+    }
 
-        @GetMapping(path = "/max-salary")
-        public String employeeMaxSalary() {
+    @GetMapping(path = "/max-salary")
 
-        return "Сотрудник с максимальной зарплатой - " + String.valueOf(employeeServiceImpl.employeeMaxSalary());
-        }
+    public String employeeMaxSalary(@RequestParam(required = false, value = "departmentID") Integer department) {
+        if (department == null)
+            throw new RuntimeException("Данные введены не полностью");
+        else
+        return "Сотрудник департамента - " + department + " с максимальной зарплатой - " + String.valueOf(employeeServiceImpl.employeeMaxSalary(department));
+    }
+
     @GetMapping(path = "/min-salary")
-    public String employeeMinSalary() {
-        return "Сотрудник с минимальной зарплатой - " + String.valueOf(employeeServiceImpl.employeeMinSalary());
+    public String employeeMinSalary(@RequestParam(required = false, value = "departmentID") Integer department) {
+        return "Сотрудник департамента - " + department + " с минимальной зарплатой - " + String.valueOf(employeeServiceImpl.employeeMinSalary(department));
     }
 
-
-    @GetMapping(path = "/print")
-    public String printAllEmployee() {
-            return employeeServiceImpl.printAllEmployee();
+    @GetMapping(path = "/all")
+    public String employeePrint(@RequestParam(required = false, value = "departmentID") Integer department) {
+        if (department == null) {
+            return employeeServiceImpl.employeePrintAll().toString();
+        } else {
+            return employeeServiceImpl.employeePrintDepartment(department).toString();
         }
     }
+}
 
